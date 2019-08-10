@@ -8,83 +8,80 @@
  * Copyright 2014, Codrops
  * http://www.codrops.com
  */
-window.executeMainJS = function() {
-	(function() {
+(function() {
+	var support = { animations : Modernizr.cssanimations },
+		container = document.getElementById( 'ip-container' ),
+		header = container.querySelector( 'header.ip-header' ),
+		loader = new PathLoader( document.getElementById( 'ip-loader-circle' ) ),
+		animEndEventNames = { 'WebkitAnimation' : 'webkitAnimationEnd', 'OAnimation' : 'oAnimationEnd', 'msAnimation' : 'MSAnimationEnd', 'animation' : 'animationend' },
+		// animation end event name
+		animEndEventName = animEndEventNames[ Modernizr.prefixed( 'animation' ) ];
 
-		var support = { animations : Modernizr.cssanimations },
-			container = document.getElementById( 'ip-container' ),
-			header = container.querySelector( 'header.ip-header' ),
-			loader = new PathLoader( document.getElementById( 'ip-loader-circle' ) ),
-			animEndEventNames = { 'WebkitAnimation' : 'webkitAnimationEnd', 'OAnimation' : 'oAnimationEnd', 'msAnimation' : 'MSAnimationEnd', 'animation' : 'animationend' },
-			// animation end event name
-			animEndEventName = animEndEventNames[ Modernizr.prefixed( 'animation' ) ];
-
-		function init() {
-			var onEndInitialAnimation = function() {
-				if( support.animations ) {
-					this.removeEventListener( animEndEventName, onEndInitialAnimation );
-				}
-
-				startLoading();
-			};
-
-			// disable scrolling
-			window.addEventListener( 'scroll', noscroll );
-
-			// initial animation
-			classie.add( container, 'loading' );
-
+	function init() {
+		var onEndInitialAnimation = function() {
 			if( support.animations ) {
-				container.addEventListener( animEndEventName, onEndInitialAnimation );
+				this.removeEventListener( animEndEventName, onEndInitialAnimation );
 			}
-			else {
-				onEndInitialAnimation();
-			}
+
+			startLoading();
+		};
+
+		// disable scrolling
+		window.addEventListener( 'scroll', noscroll );
+
+		// initial animation
+		classie.add( container, 'loading' );
+
+		if( support.animations ) {
+			container.addEventListener( animEndEventName, onEndInitialAnimation );
 		}
+		else {
+			onEndInitialAnimation();
+		}
+	}
 
-		function startLoading() {
-			// simulate loading something..
-			var simulationFn = function(instance) {
-				var progress = 0,
-					interval = setInterval( function() {
-						progress = Math.min( progress + Math.random() * 0.1, 1 );
+	function startLoading() {
+		// simulate loading something..
+		var simulationFn = function(instance) {
+			var progress = 0,
+				interval = setInterval( function() {
+					progress = Math.min( progress + Math.random() * 0.1, 1 );
 
-						instance.setProgress( progress );
+					instance.setProgress( progress );
 
-						// reached the end
-						if( progress === 1 ) {
-							classie.remove( container, 'loading' );
-							classie.add( container, 'loaded' );
-							clearInterval( interval );
+					// reached the end
+					if( progress === 1 ) {
+						classie.remove( container, 'loading' );
+						classie.add( container, 'loaded' );
+						clearInterval( interval );
 
-							var onEndHeaderAnimation = function(ev) {
-								if( support.animations ) {
-									if( ev.target !== header ) return;
-									this.removeEventListener( animEndEventName, onEndHeaderAnimation );
-								}
-
-								classie.add( document.body, 'layout-switch' );
-								window.removeEventListener( 'scroll', noscroll );
-							};
-
+						var onEndHeaderAnimation = function(ev) {
 							if( support.animations ) {
-								header.addEventListener( animEndEventName, onEndHeaderAnimation );
+								if( ev.target !== header ) return;
+								this.removeEventListener( animEndEventName, onEndHeaderAnimation );
 							}
-							else {
-								onEndHeaderAnimation();
-							}
+
+							classie.add( document.body, 'layout-switch' );
+							window.removeEventListener( 'scroll', noscroll );
+						};
+
+						if( support.animations ) {
+							header.addEventListener( animEndEventName, onEndHeaderAnimation );
 						}
-					}, 80 );
-			};
+						else {
+							onEndHeaderAnimation();
+						}
+					}
+				}, 80 );
+		};
 
-			loader.setProgressFn( simulationFn );
-		}
-		
-		function noscroll() {
-			window.scrollTo( 0, 0 );
-		}
+		loader.setProgressFn( simulationFn );
+	}
+	
+	function noscroll() {
+		window.scrollTo( 0, 0 );
+	}
 
-		init();
+	init();
 
-	})();
-}
+})();

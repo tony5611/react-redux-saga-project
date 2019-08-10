@@ -18,13 +18,22 @@
     <link href="%PUBLIC_URL%/assets/javascripts/fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css">
     <link href="%PUBLIC_URL%/assets/stylesheets/css/global.css" rel="stylesheet">
     <link href="%PUBLIC_URL%/assets/stylesheets/css/effect2.css" rel="stylesheet" type="text/css">
-    <!-- <script src="%PUBLIC_URL%/assets/javascripts/modernizr.custom.js"></script> -->
+    <script src="%PUBLIC_URL%/assets/javascripts/modernizr.custom.js"></script>
   </head>
   <body class="demo-1">
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
-    <div id="root"></div>
+    
+    <div class="ip-container" id="ip-container">
+      <!-- initial header -->
+      <header class="ip-header">
+        <div class="ip-loader">
+          <svg class="ip-inner" height="60px" viewBox="0 0 80 80" width="60px"><path class="ip-loader-circlebg" d="M40,10C57.351,10,71,23.649,71,40.5S57.351,71,40.5,71 S10,57.351,10,40.5S23.649,10,40.5,10z"></path><path class="ip-loader-circle" d="M40,10C57.351,10,71,23.649,71,40.5S57.351,71,40.5,71 S10,57.351,10,40.5S23.649,10,40.5,10z" id="ip-loader-circle"></path></svg>
+        </div>
+      </header>
+      <div id="root"></div>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
